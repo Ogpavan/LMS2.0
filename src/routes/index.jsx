@@ -13,6 +13,7 @@ import Students from "../features/students/Students.jsx";
 import Instructors from "../features/instructors/Instructors.jsx";
 import Settings from "../features/settings/Settings.jsx";
 import CourseView from "@/features/courses/CourseView.jsx";
+import Liveclass from "@/features/liveclass/Liveclass.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -70,6 +71,14 @@ export const router = createBrowserRouter([
             element: (
               <ProtectedRoute allowedRoles={["admin", "instructor", "student"]}>
                 <Assignments />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "liveclass",
+            element: (
+              <ProtectedRoute allowedRoles={["admin", "instructor", "student"]}>
+                <Liveclass />
               </ProtectedRoute>
             ),
           },

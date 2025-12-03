@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { href, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { cn } from "../../lib/utils.js";
 import {
-  Home,
-  BookOpen,
-  Video,
-  ClipboardList,
-  FileText,
-  BarChart,
-  MessageSquare,
-  Settings,
-  User,
-  Users,
-  Power,
-  Sun,
-  Moon,
-  X,
-} from "lucide-react";
+  faHome,
+  faBookOpen,
+  faClipboardList,
+  faFileAlt,
+  faUsers,
+  faUser,
+  faCog,
+  faPowerOff,
+  faSun,
+  faVideo,
+  faMoon,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Dialog,
   DialogTrigger,
@@ -28,18 +27,21 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Power, X } from "lucide-react";
 
 const icons = {
-  Home,
-  BookOpen,
-  Video,
-  ClipboardList,
-  FileText,
-  BarChart,
-  MessageSquare,
-  Settings,
-  User,
-  Users,
+  Home: faHome,
+  BookOpen: faBookOpen,
+  ClipboardList: faClipboardList,
+  FileText: faFileAlt,
+  Settings: faCog,
+  User: faUser,
+  Users: faUsers,
+  Power: faPowerOff,
+  Sun: faSun,
+  Moon: faMoon,
+  X: faTimes,
+  Video: faVideo, // <-- Add this mapping
 };
 
 const Sidebar = ({ onClose }) => {
@@ -50,6 +52,7 @@ const Sidebar = ({ onClose }) => {
   const { hasAnyRole, user, signout } = useAuth();
   const navigate = useNavigate();
 
+  // ...existing code...
   const navigationItems = [
     {
       name: "Dashboard",
@@ -62,6 +65,12 @@ const Sidebar = ({ onClose }) => {
       href: "/dashboard/courses",
       icon: "BookOpen",
       roles: ["admin", "instructor", "student"],
+    },
+    {
+      name: "Live Class",
+      href: "/dashboard/liveClass",
+      icon: "Video", // You can choose a more suitable icon if needed
+      roles: ["student", "instructor", "admin"], // <-- Added "student" role
     },
     {
       name: "Assignments",
@@ -94,6 +103,7 @@ const Sidebar = ({ onClose }) => {
       roles: ["admin", "instructor", "student"],
     },
   ];
+  // ...existing code...
 
   const filteredNavItems = navigationItems.filter((item) =>
     hasAnyRole(item.roles)
@@ -189,7 +199,6 @@ const Sidebar = ({ onClose }) => {
           <div className="flex-1 py-4 overflow-y-auto relative z-10">
             <div className="space-y-1">
               {filteredNavItems.map((item) => {
-                const IconComponent = icons[item.icon];
                 return (
                   <div
                     key={item.name}
@@ -198,6 +207,7 @@ const Sidebar = ({ onClose }) => {
                     <NavLink
                       to={item.href}
                       onClick={() => onClose?.()}
+                      end={item.href === "/dashboard"}
                       className={({ isActive }) =>
                         cn(
                           "flex items-center py-2.5 rounded-xl transition-all duration-300 group backdrop-blur-sm",
@@ -218,7 +228,10 @@ const Sidebar = ({ onClose }) => {
                                 : "text-gray-500/80 dark:text-gray-400/80 group-hover:text-blue-500 dark:group-hover:text-blue-400"
                             )}
                           >
-                            <IconComponent size={20} />
+                            <FontAwesomeIcon
+                              icon={icons[item.icon]}
+                              size="lg"
+                            />
                           </span>
                           <span
                             className={`overflow-hidden transition-all duration-500 ease-out text-sm font-medium ${
@@ -254,7 +267,10 @@ const Sidebar = ({ onClose }) => {
               }`}
             >
               <span className="shrink-0 transition-colors duration-300">
-                {theme === "dark" ? <Moon size={20} /> : <Sun size={20} />}
+                <FontAwesomeIcon
+                  icon={theme === "dark" ? icons.Moon : icons.Sun}
+                  size="lg"
+                />
               </span>
               {!collapsed && (
                 <span className="ml-3 text-sm font-medium">
